@@ -1,25 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { CssBaseline, ThemeProvider, createTheme, Box } from "@mui/material";
+import SidebarMenu from "./components/SideBar";
+import DataTable from "./components/DataTable";
+
+const theme = createTheme({
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        body {
+          background-color: black;
+          color: white;
+        }
+      `,
+    },
+  },
+});
 
 function App() {
+  const defaultSelectedItem = "Проекту";
+  const [selectedItem, setSelectedItem] = useState<string>(defaultSelectedItem);
+
+  const handleItemClick = (text: string) => {
+    setSelectedItem(text);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box sx={{ display: "flex" }}>
+        <SidebarMenu onItemClick={handleItemClick} />
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            padding: 2,
+            backgroundColor: "black",
+            color: "white",
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          {selectedItem && <DataTable />}
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 }
 
